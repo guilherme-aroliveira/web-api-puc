@@ -1,8 +1,12 @@
 // Importing the express module
 const express = require("express")
+const bodyParser = require("body-parser");
 
 // calling the express function
 const app = express();
+
+app.use(bodyParser.json()); // middleware
+
 const veiculos = [
     {id:0, placa:"ABC-1234", modelo:"Fusca", marca:"Volkswagen", ano:"1970", cor:"Azul", pecas: [
         {id:0, nome:"Motor", mcarca:"Volkswagen", ano:1970, preco:1000},
@@ -14,8 +18,8 @@ const veiculos = [
         {id:1, nome:"Pneu", marca:"Pirelli", ano:2000, preco:200},
         {id:2, nome:"Bateria", marca:"Moura", ano:2000, preco:300},
     ]},
-    {id:2, placa:"GHI-9012", modelo:"Uno", marca:"Volkswagen", ano:"2005", cor:"Branco", pecas: [
-        {id:0, nome:"Motor", mcarca:"Fiat", ano:2005, preco:1000},
+    {id:2, placa:"GHI-9012", modelo:"Uno", marca:"Fiat", ano:"2005", cor:"Branco", pecas: [
+        {id:0, nome:"Motor", marca:"Fiat", ano:2005, preco:1000},
         {id:1, nome:"Pneu", marca:"Pirelli", ano:2005, preco:200},
         {id:2, nome:"Bateria", marca:"Moura", ano:2005, preco:300},
     ]},
@@ -39,6 +43,37 @@ app.get(`${VEICULOS_BASE_URL}/:id`, (req, res) => {
     else {
         res.send(veiculo)
     } 
+});
+
+app.post(`${VEICULOS_BASE_URL}`, (req, res) => {
+    if (req.body.id) {
+        res.status(412).send({message:"Veiculo nao deve conter id para ser incluido"});
+        return;
+    }
+    if (!req.body.modelo) {
+        res.status(412).send({message:"Modelo e obrigatorio"});
+        return;
+    }
+    if (!req.body.marca) {
+        res.status(412).send({message:"Marca e obrigatorio"});
+        return;
+    }
+
+
+    const funcaoReducer = (anterior, atual) => {
+        if (atual.id > anterior) {
+            return atual.id
+        }
+        else {
+            return anterior
+        }
+    }
+
+
+    const id = veiculos.reduce(funcaoReducer, 0) + 1;
+    const novoVeiculo = {...req.body,id}
+    veiculos.push(novoVeiculo)
+    res.status(201).send(novoVeiculo);
 });
 
 // testing the endpoint
