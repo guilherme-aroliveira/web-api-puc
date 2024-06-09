@@ -1,0 +1,20 @@
+{
+  "name": "web-api-puc",
+  "version": "1.0.0",
+  "description": "application for the APIs discipline at PUC-MG",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "author": "Guilherme",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "express-hateoas-links": "^1.3.1",
+    "swagger-autogen": "^2.23.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.3"
+  }
+}
