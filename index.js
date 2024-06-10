@@ -1,6 +1,7 @@
 const app = require("./rest-server");
 
 require("./vehicles")
+require("./docs")
 
 // testing the endpoint
 app.get("/test", (req, res) => {
